@@ -1,5 +1,5 @@
 import React from 'react';
-import { View } from 'react-native';
+import { View, Text } from 'react-native';
 //import { styles } from './inventory-list.style'
 
 interface Props extends Navigation<{}> {
@@ -14,7 +14,7 @@ export class InventoryListScreen extends React.Component<Props> {
   render() {
     return (
       <View style={{ flex: 1 }}>
-        "Hello"
+        <Text>Hello</Text>
       </View>
     );
   }

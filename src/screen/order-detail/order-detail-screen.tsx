@@ -1,5 +1,5 @@
 import React from 'react';
-import { View } from 'react-native';
+import { View, Text } from 'react-native';
 //import { styles } from './inventory-list.style'
 
 interface Props extends Navigation<{}> {
@@ -8,13 +8,13 @@ interface Props extends Navigation<{}> {
 
 export class OrderDetailScreen extends React.Component<Props> {
   static navigationOptions = {
-    title: 'Inventory List'
+    title: 'Order Detail'
   };
 
   render() {
     return (
       <View style={{ flex: 1 }}>
-        "Hello"
+        <Text>Hello</Text>
       </View>
     );
   }

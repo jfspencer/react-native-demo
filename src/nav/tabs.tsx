@@ -10,13 +10,13 @@ import { InventoryStack } from '@nav/Inventory-stack';
 
 
 export const TabNavigator = createBottomTabNavigator({
-  Products: ProductStack,
+  Product: ProductStack,
   Inventory: InventoryStack,
   Orders: OrderStack
 },
   {
     lazy: true,
-    initialRouteName: 'Home',
+    initialRouteName: 'Product',
     defaultNavigationOptions: ({ navigation }: any) => ({
       //additional param : horizontal
       tabBarIcon: ({ focused, tintColor }: { focused: boolean, horizontal: boolean, tintColor: string }) => {
