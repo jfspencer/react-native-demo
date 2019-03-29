@@ -1,20 +1,17 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.csdemo">
+  package="com.csdemo">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
 
     <application
-      android:name="com.csdemo.MainApplication"
+      android:name=".MainApplication"
       android:label="@string/app_name"
       android:icon="@mipmap/ic_launcher"
+      android:roundIcon="@mipmap/ic_launcher_round"
       android:allowBackup="false"
       android:theme="@style/AppTheme">
-      <meta-data
-        android:name="com.google.android.geo.API_KEY"
-        android:value="AIzaSyByREBrRgLhqVBCaxxzsqqRjp53WLM-Pdc"/>
       <activity
-        android:name="com.csdemo.MainActivity"
+        android:name=".MainActivity"
         android:label="@string/app_name"
         android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
         android:windowSoftInputMode="adjustResize">
