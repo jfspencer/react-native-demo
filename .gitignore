@@ -22,14 +22,6 @@ DerivedData
 *.xcuserstate
 project.xcworkspace
 
-# Cocoapods
-#
-#CBL is to large to commit to source control, so it needs to be regenerated after cloning
-ios/Pods/*
-!ios/Pods/Local\ Podspecs/*
-!ios/Pods/Manifest.lock
-!ios/Pods/Pods.xcodeproj
-
 # Android/IntelliJ
 #
 build/
