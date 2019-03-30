@@ -4,6 +4,7 @@ type RouteName =
     'ProductList' | 'ProductDetail'
 
 interface Navigation<StateParams> {
+    dispatch: (route: string) => void
     navigation: {
         state: {
             params: StateParams
