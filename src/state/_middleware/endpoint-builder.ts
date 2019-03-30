@@ -1,3 +1,5 @@
+import URI from 'urijs';
+
 const buildHeaders = (headers: any) => ({
     'Content-Type': 'application/json',
     ...headers
@@ -12,28 +14,36 @@ const safeString = (data: any) => {
     }
 }
 
-export const getConfig = (endpoint: string, headers = {}, excludeJWT: boolean = false) => ({
-    url: endpoint, method: 'GET',
+const urlBuilder = (url: string, params: any) => {
+    const uri = new URI(url)
+    Object.keys(params).forEach(key => uri.addQuery(key, params[key]))
+    return uri.valueOf()
+}
+
+export const getConfig = (endpoint: string, headers = {}, params = {}, excludeJWT: boolean = false) => ({
+    url: urlBuilder(endpoint, params),
+    method: 'GET',
     headers: buildHeaders(headers),
+    params,
     excludeJWT
 });
 
-export const postConfig = (endpoint: string, payload: any, headers = {}, excludeJWT: boolean = false) => ({
-    url: endpoint,
+export const postConfig = (endpoint: string, payload: any, headers = {}, params = {}, excludeJWT: boolean = false) => ({
+    url: urlBuilder(endpoint, params),
     method: 'POST',
-    headers: buildHeaders({ ...headers, Accept: 'application/json' }),
+    headers: buildHeaders(headers),
     body: safeString(payload)
 });
 
-export const putConfig = (endpoint: any, payload: any, headers = {}, excludeJWT: boolean = false) => ({
-    url: endpoint,
+export const putConfig = (endpoint: any, payload: any, headers = {}, params = {}, excludeJWT: boolean = false) => ({
+    url: urlBuilder(endpoint, params),
     method: 'PUT',
     headers: buildHeaders({ ...headers, Accept: 'application/json' }),
     body: safeString(payload)
 });
 
-export const deleteConfig = (endpoint: any, payload: any, headers = {}, excludeJWT: boolean = false) => ({
-    url: endpoint,
+export const deleteConfig = (endpoint: any, payload: any, headers = {}, params = {}, excludeJWT: boolean = false) => ({
+    url: urlBuilder(endpoint, params),
     method: 'DELETE',
     headers: buildHeaders(headers),
     body: safeString(payload)

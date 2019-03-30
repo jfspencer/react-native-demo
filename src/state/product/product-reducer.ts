@@ -1,8 +1,10 @@
 
-const initialState = {}
+const initialState = {
+    allProducts: []
+}
 
 const cases: any = {}
-cases['TEST'] = (state: any, action: any) => ({ ...state, action })
+cases['ALL_PRODUCTS_RESPONSE'] = (state: any, action: any) => ({ ...state, allProducts: action.payload })
 
 export const product = (state = initialState, action: any) => {
     return typeof cases[action.type] === 'function' ? cases[action.type](state, action) : state;
