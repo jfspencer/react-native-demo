@@ -10,7 +10,7 @@ interface SFCExt<Props> extends SFC<Props> {
 }
 
 interface Props extends Navigation<{}> {
-  allProducts: ReadonlyArray<{ item: Product, index: string }>
+  allProducts: any
   getPagedProductsAction: any
   total: number
 }
@@ -28,7 +28,7 @@ const pullMoreProducts = (last: number, setPage: Function, total: number, localC
 
 const getProductKey = (item: any) => String(item.id)
 
-const renderLine = ({ item }: any) => (<TouchableOpacity style={s.button} onPress={() => navigate('ProductDetail', { id: item.id, layout: 'View' })}><Text>{item.product_name}</Text></TouchableOpacity>)
+const renderLine = ({ item }: { item: Product }) => (<TouchableOpacity style={s.button} onPress={() => navigate('ProductDetail', { id: item.id, layout: 'View' })}><Text>{item.product_name} : {item.brand}</Text></TouchableOpacity>)
 
 export const _ProductListScreen: SFCExt<Props> = ({ navigation, allProducts, total, getPagedProductsAction }) => {
   const [lastPage, setPage] = useState(0);
