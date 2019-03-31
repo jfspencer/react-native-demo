@@ -1,7 +1,9 @@
-import React, { SFC, useEffect } from 'react';
-import { View, Text } from 'react-native';
+import React, { SFC, useEffect, useState } from 'react';
+import { View, Text, FlatList } from 'react-native';
+import random from 'lodash/random';
 import { connect } from 'react-redux';
-import { setNavRef } from '@nav/util/nav-service';
+import { getPagedProductsAction, selectAllProducts, selectAllProductsTotal } from '@state/product';
+import { Product } from '@interface/common';
 //import { styles } from './inventory-list.style'
 
 interface SFCExt<Props> extends SFC<Props> {
@@ -9,32 +11,49 @@ interface SFCExt<Props> extends SFC<Props> {
 }
 
 interface Props extends Navigation<{}> {
-  state: any
+  allProducts: ReadonlyArray<{ item: Product, index: string }>
+  getPagedProductsAction: any
+  total: number
 }
 
-export const _ProductListScreen: SFCExt<Props> = ({ navigation }) => {
+const pullMoreProducts = (last: number, setPage: Function, total: number, localCount: number, productAction: any) => (info: any) => {
+  console.warn(last, total, localCount)
+  if (total === 0) productAction(last)
+  else if (total > localCount) productAction(last)
+  setPage(last + 1)
+}
 
+const getProductKey = ({ item }: { item: Product, index: string }) => item ? String(item.id) : String(random(99999))
+const renderLine = ({ item }: any) => (<Text>{item.product_name}</Text>)
+
+export const _ProductListScreen: SFCExt<Props> = ({ navigation, allProducts, total, getPagedProductsAction }) => {
+  const [lastPage, setPage] = useState(0);
 
   useEffect(() => {
-    setNavRef(navigation)
-
+    pullMoreProducts(lastPage, setPage, total, allProducts.length, getPagedProductsAction)(null)
   }, [])
 
-
+  //
   return (
     <View style={{ flex: 1 }}>
-      <Text>Hello</Text>
+      <FlatList
+        data={allProducts}
+        extraData={allProducts.length}
+        renderItem={renderLine}
+        onEndReachedThreshold={1}
+        keyExtractor={getProductKey}
+        onEndReached={pullMoreProducts(lastPage, setPage, total, allProducts.length, getPagedProductsAction)}>
+      </FlatList>
     </View>
   );
-
 }
 
-_ProductListScreen.navigationOptions = {
-  title: 'Product List'
-};
+_ProductListScreen.navigationOptions = { title: 'Product List' };
 
-function mapStateToProps({ product }: any) {
-  return { allProducts: product.allProducts }
-}
+const mapStateToProps = (state: any) => ({
+  allProducts: selectAllProducts(state),
+  total: selectAllProductsTotal(state)
 
-export const ProductListScreen = connect(mapStateToProps)(_ProductListScreen)
+})
+
+export const ProductListScreen = connect(mapStateToProps, { getPagedProductsAction }, null)(_ProductListScreen)
