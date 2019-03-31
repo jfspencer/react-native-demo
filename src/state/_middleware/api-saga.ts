@@ -2,10 +2,12 @@ import { call, put, putResolve, takeEvery, select } from 'redux-saga/effects';
 import { getAccessToken } from '@state/auth';
 import { toJSON } from '@state/_middleware/utils';
 
-export const fetchRequestSagaStyle = ({ url = '/', method = 'GET', headers = {}, excludeJWT, body }: any, accessToken: String) => {
+export const fetchRequest = ({ url = '/', method = 'GET', headers = {}, excludeJWT, body }: any, accessToken: String) => {
     if (!excludeJWT) headers.Authorization = `Bearer ${accessToken}`;
-    console.warn(url, { method, headers, body })
-    return fetch(url, { method, headers, body });
+    const requestConfig: { method: string, headers: any, body?: any } = { method, headers }
+    if (body) requestConfig.body = body;
+    if (__DEV__) console.warn(url, excludeJWT, requestConfig);
+    return fetch(url, requestConfig)
 };
 
 //pull in state from passed in selector functions, pass through everything else
@@ -36,8 +38,7 @@ export function* apiProcessor(action: any) {
 
         const builtRequest = action.api.request(...resolvedData);
         const token = yield select(getAccessToken);
-        const networkResponse = yield call(fetchRequestSagaStyle, builtRequest, token);
-
+        const networkResponse = yield call(fetchRequest, builtRequest, token)
         if (action.api.successActionName) {
             const result = yield call(toJSON, networkResponse);
             const processedResponse = action.api.successFn ? action.api.successFn(result) : result;
@@ -46,7 +47,6 @@ export function* apiProcessor(action: any) {
 
         return 0;
     } catch (e) {
-        console.log(action)
         if (action.api.failureActionName) {
             const failureResponse = action.api.failureFn ? action.api.failureFn(e) : e;
             yield putResolve({ type: action.api.failureActionName, payload: failureResponse });
