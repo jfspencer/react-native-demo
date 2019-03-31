@@ -2,14 +2,16 @@ import React, { SFC, useState, useEffect } from 'react';
 import { Text, TextInput, StyleSheet, ScrollView } from 'react-native';
 import { Picker } from 'native-base';
 import { Product } from '@interface/common';
-import { getProductStylesAction, selectProductStyles } from '@state/product';
+import { getProductStylesAction, selectProductStyles, getProductColorsAction, selectProductColors } from '@state/product';
 import { connect } from 'react-redux';
 
 interface Props {
     //declare props here
     product: Product
     productStyles: string[]
+    productColors: string[]
     getProductStylesAction: Function
+    getProductColorsAction: Function
 }
 
 const s = StyleSheet.create({
@@ -20,9 +22,9 @@ const s = StyleSheet.create({
 
 const updateInput = (setter: Function) => (val: string) => setter(val)
 
-const styleOptions = (styles: string[]) => styles.map(v => (<Picker.Item label={v} value={v} />))
+const pickerOptions = (options: string[]) => options.map(v => (<Picker.Item label={v} value={v} />))
 
-export const _ProductDetailEdit: SFC<Props> = ({ product, productStyles, getProductStylesAction }) => {
+export const _ProductDetailEdit: SFC<Props> = ({ product, productStyles, productColors, getProductStylesAction, getProductColorsAction }) => {
 
     const [name, setName] = useState(product.product_name)
     const [brand, setBrand] = useState(product.brand)
@@ -34,6 +36,7 @@ export const _ProductDetailEdit: SFC<Props> = ({ product, productStyles, getProd
 
     useEffect(() => {
         getProductStylesAction()
+        getProductColorsAction()
     }, [])
 
 
@@ -53,24 +56,24 @@ export const _ProductDetailEdit: SFC<Props> = ({ product, productStyles, getProd
             <Text style={s.label}>Style</Text>
             <Picker
                 selectedValue={style}
-                style={{ height: 50 }}
+                style={s.input}
                 onValueChange={(itemValue) => setStyle(itemValue)}>
-                {styleOptions(productStyles)}
+                {pickerOptions(productStyles)}
             </Picker>
             <Text style={s.label}>Color (Note: not exposed via product get endpoint)</Text>
             <Picker
                 selectedValue={color}
-                style={{ height: 50 }}
+                style={s.input}
                 onValueChange={(itemValue) => setColor(itemValue)}>
-                <Picker.Item label="theBlue" value="theBlue" />
-                <Picker.Item label="theRed" value="theRed" />
+                {pickerOptions(productColors)}
             </Picker>
         </ScrollView>
     )
 }
 
 const mapStateToProps = (state: any) => ({
-    productStyles: selectProductStyles(state)
+    productStyles: selectProductStyles(state),
+    productColors: selectProductColors(state)
 })
 
-export const ProductDetailEdit = connect(mapStateToProps, { getProductStylesAction }, null)(_ProductDetailEdit)
+export const ProductDetailEdit = connect(mapStateToProps, { getProductStylesAction, getProductColorsAction }, null)(_ProductDetailEdit)
