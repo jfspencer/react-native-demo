@@ -6,11 +6,12 @@ import { ProductDetailEdit } from './product-layout-edit';
 import { TouchableOpacity, Text, StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
 import { selectProductById } from '@state/product';
+import { store } from '@state/index';
 
 
+type navParams = { id: number, layout: LayoutMode }
 
-
-interface Props extends Navigation<{ id: number, layout: LayoutMode }> {
+interface Props extends Navigation<navParams> {
   product: Product
   state: any
 }
@@ -20,19 +21,33 @@ const s = StyleSheet.create({
   headerButton: { marginRight: 20, fontSize: 20 }
 })
 
+let latestProductRef: Product
+const handleSave = (nav: any, layout: LayoutMode) => () => {
+  //if (layout === 'Edit') store.dispatch()
+  //else if (layout === 'Create') store.dispatch()
+  nav.pop()
+}
+
+const updateProductRef = (product: Product) => { latestProductRef = product }
+
 export class _ProductDetailScreen extends React.Component<Props> {
-  static staticSetState: any
   componentDidMount() {
     this.setState({ layout: this.props.navigation.state.params.layout })
-    ProductDetailScreen.staticSetState = this.setState
   }
 
-
   static navigationOptions = ({ navigation }: any) => {
-    const options: any = { title: `${navigation.state.params.layout} Product` }
-    if (navigation.state.params.layout === 'View')
-      options.headerRight = (<TouchableOpacity style={s.headerButton} onPress={() => navigation.push('ProductDetail', { id: navigation.state.params.id, layout: 'Edit' })}><Text>Edit</Text></TouchableOpacity>)
-    else options.headerRight = (<TouchableOpacity style={s.headerButton} onPress={() => navigation.pop()}><Text>Save</Text></TouchableOpacity>)
+    const { layout, id } = navigation.state.params
+    const options: any = { title: `${layout} Product` }
+    if (layout === 'View') options.headerRight = (
+      <TouchableOpacity style={s.headerButton} onPress={() => navigation.push('ProductDetail', { id, layout: 'Edit' })}>
+        <Text>Edit</Text>
+      </TouchableOpacity>
+    )
+    else options.headerRight = (
+      <TouchableOpacity style={s.headerButton} onPress={handleSave(navigation, layout)}>
+        <Text>Save</Text>
+      </TouchableOpacity>
+    )
     return options;
   };
 
@@ -41,9 +56,9 @@ export class _ProductDetailScreen extends React.Component<Props> {
     const { layout } = this.props.navigation.state.params
     return (
       <>
-        {layout == 'Create' && <ProductDetailCreate />}
+        {layout == 'Create' && <ProductDetailCreate sendLatestChanges={updateProductRef} />}
         {layout == 'View' && <ProductDetailView product={product} />}
-        {layout == 'Edit' && <ProductDetailEdit product={product} />}
+        {layout == 'Edit' && <ProductDetailEdit product={product} sendLatestChanges={updateProductRef} />}
       </>
 
     );

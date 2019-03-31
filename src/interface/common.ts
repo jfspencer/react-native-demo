@@ -7,6 +7,7 @@ export interface NewProduct {
 }
 
 export interface Product {
+    [key: string]: any
     id: number
     product_name: string
     description: string
