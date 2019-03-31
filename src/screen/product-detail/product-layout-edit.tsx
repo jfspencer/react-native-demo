@@ -1,11 +1,15 @@
-import React, { SFC, useState } from 'react';
+import React, { SFC, useState, useEffect } from 'react';
 import { Text, TextInput, StyleSheet, ScrollView } from 'react-native';
 import { Picker } from 'native-base';
 import { Product } from '@interface/common';
+import { getProductStylesAction, selectProductStyles } from '@state/product';
+import { connect } from 'react-redux';
 
 interface Props {
     //declare props here
     product: Product
+    productStyles: string[]
+    getProductStylesAction: Function
 }
 
 const s = StyleSheet.create({
@@ -16,7 +20,9 @@ const s = StyleSheet.create({
 
 const updateInput = (setter: Function) => (val: string) => setter(val)
 
-export const ProductDetailEdit: SFC<Props> = ({ product }) => {
+const styleOptions = (styles: string[]) => styles.map(v => (<Picker.Item label={v} value={v} />))
+
+export const _ProductDetailEdit: SFC<Props> = ({ product, productStyles, getProductStylesAction }) => {
 
     const [name, setName] = useState(product.product_name)
     const [brand, setBrand] = useState(product.brand)
@@ -25,6 +31,10 @@ export const ProductDetailEdit: SFC<Props> = ({ product }) => {
     const [type, setType] = useState(product.product_type)
     const [style, setStyle] = useState(product.style)
     const [color, setColor] = useState('blue')
+
+    useEffect(() => {
+        getProductStylesAction()
+    }, [])
 
 
     return (
@@ -45,8 +55,7 @@ export const ProductDetailEdit: SFC<Props> = ({ product }) => {
                 selectedValue={style}
                 style={{ height: 50 }}
                 onValueChange={(itemValue) => setStyle(itemValue)}>
-                <Picker.Item label="Streetware" value="Streetware" />
-                <Picker.Item label="Another" value="Another" />
+                {styleOptions(productStyles)}
             </Picker>
             <Text style={s.label}>Color (Note: not exposed via product get endpoint)</Text>
             <Picker
@@ -59,3 +68,9 @@ export const ProductDetailEdit: SFC<Props> = ({ product }) => {
         </ScrollView>
     )
 }
+
+const mapStateToProps = (state: any) => ({
+    productStyles: selectProductStyles(state)
+})
+
+export const ProductDetailEdit = connect(mapStateToProps, { getProductStylesAction }, null)(_ProductDetailEdit)
