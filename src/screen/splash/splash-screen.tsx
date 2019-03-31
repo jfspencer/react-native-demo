@@ -3,8 +3,7 @@ import { Text, TextInput, View, TouchableOpacity, StyleSheet } from 'react-nativ
 import { store } from '@state/index'
 //import { useEffect } from 'react';
 import { appInit } from '@domain/lifecycle/app-init';
-import { getAuthAction } from '@state/auth';
-import { setNavRef } from '@nav/util/nav-service';
+import { getAuthAction, setJWTAction } from '@state/auth';
 
 type StateParams = {
   //declare nav state params here
@@ -24,15 +23,11 @@ const styles = StyleSheet.create({
 export const SplashScreen: SFC<Props> = ({ navigation }) => {
   const [user, setUser] = useState('truman.marcos@foomail.org');
   const [pass, setPass] = useState('AqSMUhGxgy');
-  //application space entry point
-  //CANT USE YET
-  useEffect(() => {
-    setNavRef(navigation)
-    //appInit().fork(console.error, () => navigation.navigate("Tabs"))
-  }, [])
-  //appInit().fork(console.error, () => navigation.navigate('ProductList'))
+  const [jwt, setJWT] = useState('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjY0LCJleHAiOjE1ODU1MzE2NDd9.AlvstTir73NnA-hX8J5ecbx8TnfNxL8A4QtuRLsY3NA');
 
-  //() => navigation.navigate('ProductList')
+  useEffect(() => {
+    //appInit().fork(console.error, () => navigation.navigate("ProductList"))
+  }, [])
 
   return (
     <View style={{ marginVertical: 40 }}>
@@ -49,7 +44,17 @@ export const SplashScreen: SFC<Props> = ({ navigation }) => {
         value={pass}
         secureTextEntry={true}
       />
-      <TouchableOpacity style={styles.button} onPress={() => store.dispatch(getAuthAction(user, pass))}>
+      <TextInput
+        style={styles.input}
+        placeholder={'JWT'}
+        onChangeText={setPass}
+        value={pass}
+        secureTextEntry={true}
+      />
+      <TouchableOpacity style={styles.button} onPress={() => {
+        if (jwt) store.dispatch(setJWTAction(jwt))
+        else store.dispatch(getAuthAction(user, pass))
+      }}>
         <Text style={styles.buttonText}>LOGIN</Text>
       </TouchableOpacity>
     </View>

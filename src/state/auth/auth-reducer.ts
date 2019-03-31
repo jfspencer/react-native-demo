@@ -7,6 +7,10 @@ cases['AUTH_RESPONSE'] = (state: any, action: any) => {
     if (action.payload.error === 0) navigate('ProductList')
     return { ...state, token: action.payload.token, error: action.payload.error }
 }
+cases['SET_JWT'] = (state: any, action: any) => {
+    navigate('ProductList')
+    return ({ ...state, token: action.payload })
+}
 
 export const auth = (state = initialState, action: any) => {
     return typeof cases[action.type] === 'function' ? cases[action.type](state, action) : state;
