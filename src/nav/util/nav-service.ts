@@ -1,10 +1,10 @@
 import { NavigationActions } from 'react-navigation';
-let _navRef: Navigation<any>
+let _navigator: Navigation<any>
 
-export const setNavRef = (newRef: any) => {
-    _navRef = newRef;
+export const setTopLevelNavigator = (newRef: any) => {
+    _navigator = newRef;
 }
 
 export function navigate(routeName: string) {
-    _navRef.dispatch(NavigationActions.navigate({ routeName }));
+    _navigator.dispatch(NavigationActions.navigate({ routeName }));
 }

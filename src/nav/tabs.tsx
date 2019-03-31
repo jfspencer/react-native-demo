@@ -7,6 +7,7 @@ import { SplashScreen } from '@screen/splash';
 import { OrderStack } from '@nav/order-stack';
 import { ProductStack } from '@nav/product-stack';
 import { InventoryStack } from '@nav/Inventory-stack';
+import { createAppContainer } from 'react-navigation';
 
 
 export const TabNavigator = createBottomTabNavigator({
@@ -45,7 +46,9 @@ export const TabNavigator = createBottomTabNavigator({
     }
   });
 
-export const RootNavigator = createSwitchNavigator({
+export const baseNavStack = createSwitchNavigator({
   Splash: SplashScreen,
   Tabs: TabNavigator
 });
+
+export const RootNavigator = createAppContainer(baseNavStack);
