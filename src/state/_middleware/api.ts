@@ -8,7 +8,7 @@ const baseHeaders = { Accept: 'application/json' }
 export const getAuth = (user: string, pass: string) =>
     getConfig(`${baseUrl}/status`, { Authorization: `Basic ${Base64.encode(`${user}:${pass}`)}` }, undefined, true)
 
-export const getAllProducts = (page: number, limit: number) => getConfig(`${baseUrl}/products`, baseHeaders, { page, limit })
+export const getPagedProducts = (page: number, limit: number) => getConfig(`${baseUrl}/products`, baseHeaders, { page, limit })
 
 export const getProduct = (id: string) => getConfig(`${baseUrl}/product/${id}`, baseHeaders)
 

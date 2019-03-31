@@ -1,7 +1,7 @@
 import React, { SFC, useState, useEffect } from 'react';
 import { Text, TextInput, View, TouchableOpacity, StyleSheet } from 'react-native';
 import { store } from '@state/index'
-import { appInit } from '@domain/lifecycle/app-init';
+//import { appInit } from '@domain/lifecycle/app-init';
 import { getAuthAction, setJWTAction } from '@state/auth';
 
 type StateParams = {
@@ -19,7 +19,7 @@ const styles = StyleSheet.create({
   buttonText: { color: 'white', fontSize: 20, textAlign: 'center', marginTop: 8 }
 })
 
-export const SplashScreen: SFC<Props> = ({ navigation }) => {
+export const SplashScreen: SFC<Props> = ({ }) => {
   const [user, setUser] = useState('truman.marcos@foomail.org');
   const [pass, setPass] = useState('AqSMUhGxgy');
   const [jwt, setJWT] = useState('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjY0LCJleHAiOjE1ODU1MzE2NDd9.AlvstTir73NnA-hX8J5ecbx8TnfNxL8A4QtuRLsY3NA');
@@ -46,7 +46,7 @@ export const SplashScreen: SFC<Props> = ({ navigation }) => {
       <TextInput
         style={styles.input}
         placeholder={'JWT'}
-        onChangeText={setPass}
+        onChangeText={setJWT}
         value={pass}
         secureTextEntry={true}
       />

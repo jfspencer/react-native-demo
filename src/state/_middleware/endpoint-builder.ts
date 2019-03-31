@@ -32,20 +32,22 @@ export const postConfig = (endpoint: string, payload: any, headers = {}, params 
     url: urlBuilder(endpoint, params),
     method: 'POST',
     headers: buildHeaders(headers),
-    body: safeString(payload)
+    body: safeString(payload),
+    excludeJWT
 });
 
 export const putConfig = (endpoint: any, payload: any, headers = {}, params = {}, excludeJWT: boolean = false) => ({
     url: urlBuilder(endpoint, params),
     method: 'PUT',
     headers: buildHeaders({ ...headers, Accept: 'application/json' }),
-    body: safeString(payload)
+    body: safeString(payload),
+    excludeJWT
 });
 
 export const deleteConfig = (endpoint: any, payload: any, headers = {}, params = {}, excludeJWT: boolean = false) => ({
     url: urlBuilder(endpoint, params),
     method: 'DELETE',
     headers: buildHeaders(headers),
-    body: safeString(payload)
-
+    body: safeString(payload),
+    excludeJWT
 });
