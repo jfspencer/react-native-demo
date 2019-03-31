@@ -1,11 +1,10 @@
 import React from 'react';
 import { LayoutMode, Product } from '@interface/common';
-import { ProductDetailCreate } from './product-layout-create';
 import { ProductDetailView } from './product-layout-view';
 import { ProductDetailEdit } from './product-layout-edit';
 import { TouchableOpacity, Text, StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
-import { selectProductById } from '@state/product';
+import { selectProductById, updateProductAction } from '@state/product';
 import { store } from '@state/index';
 
 
@@ -23,7 +22,7 @@ const s = StyleSheet.create({
 
 let latestProductRef: Product
 const handleSave = (nav: any, layout: LayoutMode) => () => {
-  //if (layout === 'Edit') store.dispatch()
+  if (layout === 'Edit') store.dispatch(updateProductAction(latestProductRef, () => nav.pop()))
   //else if (layout === 'Create') store.dispatch()
   nav.pop()
 }
@@ -56,7 +55,7 @@ export class _ProductDetailScreen extends React.Component<Props> {
     const { layout } = this.props.navigation.state.params
     return (
       <>
-        {layout == 'Create' && <ProductDetailCreate sendLatestChanges={updateProductRef} />}
+        {layout == 'Create' && <ProductDetailEdit product={{}} sendLatestChanges={updateProductRef} />}
         {layout == 'View' && <ProductDetailView product={product} />}
         {layout == 'Edit' && <ProductDetailEdit product={product} sendLatestChanges={updateProductRef} />}
       </>

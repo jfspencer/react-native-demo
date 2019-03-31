@@ -6,7 +6,7 @@ export const toJSON = (apiResponse: any) => {
     }
 }
 
-export const apiAction = (request: Function, requestData: any[], successActionName: string) => ({
+export const apiAction = (request: Function, requestData: any[], successActionName?: string) => ({
     type: 'API_REQUEST',
     api: { request, requestData, successActionName }
 })

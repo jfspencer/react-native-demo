@@ -39,19 +39,16 @@ export function* apiProcessor(action: any) {
         const builtRequest = action.api.request(...resolvedData);
         const token = yield select(getAccessToken);
         const networkResponse = yield call(fetchRequest, builtRequest, token)
+        const result = yield call(toJSON, networkResponse);
         if (action.api.successActionName) {
-            const result = yield call(toJSON, networkResponse);
             const processedResponse = action.api.successFn ? action.api.successFn(result) : result;
             yield putResolve({ type: action.api.successActionName, payload: processedResponse });
         }
-
-        return 0;
     } catch (e) {
         if (action.api.failureActionName) {
             const failureResponse = action.api.failureFn ? action.api.failureFn(e) : e;
             yield putResolve({ type: action.api.failureActionName, payload: failureResponse });
         }
-        return e;
     }
 }
 

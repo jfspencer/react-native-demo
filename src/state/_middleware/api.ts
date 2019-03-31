@@ -11,7 +11,7 @@ export const getAuth = (user: string, pass: string) =>
 
 //------ PRODUCT ENDPOINTS ------//
 export const getPagedProducts = (page: number, limit: number) => getConfig(`${baseUrl}/products`, baseHeaders, { page, limit })
-export const getProduct = (id: string) => getConfig(`${baseUrl}/product/${id}`, baseHeaders)
+export const getSingleProduct = (id: string) => getConfig(`${baseUrl}/product/${id}`, baseHeaders)
 export const getProductStyles = () => getConfig(`${baseUrl}/styles`, baseHeaders)
 export const getProductColors = () => getConfig(`${baseUrl}/colors`, baseHeaders)
 export const postProduct = (product: NewProduct) => postConfig(`${baseUrl}/product`, product, baseHeaders)
