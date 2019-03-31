@@ -1,7 +1,6 @@
 import React, { SFC, useState, useEffect } from 'react';
 import { Text, TextInput, View, TouchableOpacity, StyleSheet } from 'react-native';
 import { store } from '@state/index'
-//import { useEffect } from 'react';
 import { appInit } from '@domain/lifecycle/app-init';
 import { getAuthAction, setJWTAction } from '@state/auth';
 

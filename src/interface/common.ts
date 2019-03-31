@@ -20,3 +20,9 @@ export interface Product {
     note: string
     admin_id: number
 }
+
+export enum LayoutMode {
+    create = 'Create',
+    view = 'View',
+    edit = 'Edit'
+}

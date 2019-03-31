@@ -1,10 +1,9 @@
 import React, { SFC, useEffect, useState } from 'react';
-import { View, Text, FlatList } from 'react-native';
-import random from 'lodash/random';
+import { View, TouchableOpacity, FlatList, StyleSheet, Text } from 'react-native';
 import { connect } from 'react-redux';
 import { getPagedProductsAction, selectAllProducts, selectAllProductsTotal } from '@state/product';
 import { Product } from '@interface/common';
-//import { styles } from './inventory-list.style'
+import { navigate } from "@nav/util/nav-service";
 
 interface SFCExt<Props> extends SFC<Props> {
   navigationOptions: any
@@ -16,15 +15,20 @@ interface Props extends Navigation<{}> {
   total: number
 }
 
+const s = StyleSheet.create({
+  button: { margin: 10, fontSize: 20, padding: 10 },
+  headerButton: { marginRight: 20, fontSize: 20 }
+})
+
 const pullMoreProducts = (last: number, setPage: Function, total: number, localCount: number, productAction: any) => (info: any) => {
-  console.warn(last, total, localCount)
   if (total === 0) productAction(last)
   else if (total > localCount) productAction(last)
   setPage(last + 1)
 }
 
-const getProductKey = ({ item }: { item: Product, index: string }) => item ? String(item.id) : String(random(99999))
-const renderLine = ({ item }: any) => (<Text>{item.product_name}</Text>)
+const getProductKey = (item: any) => String(item.id)
+
+const renderLine = ({ item }: any) => (<TouchableOpacity style={s.button} onPress={() => navigate('ProductDetail', { id: item.id, layout: 'View' })}><Text>{item.product_name}</Text></TouchableOpacity>)
 
 export const _ProductListScreen: SFCExt<Props> = ({ navigation, allProducts, total, getPagedProductsAction }) => {
   const [lastPage, setPage] = useState(0);
@@ -48,7 +52,11 @@ export const _ProductListScreen: SFCExt<Props> = ({ navigation, allProducts, tot
   );
 }
 
-_ProductListScreen.navigationOptions = { title: 'Product List' };
+_ProductListScreen.navigationOptions = {
+  title: 'Product List',
+  headerRight: (<TouchableOpacity style={s.headerButton} onPress={() => navigate('ProductDetail', { layout: 'Create' })}><Text>New</Text></TouchableOpacity>)
+};
+
 
 const mapStateToProps = (state: any) => ({
   allProducts: selectAllProducts(state),
@@ -57,3 +65,7 @@ const mapStateToProps = (state: any) => ({
 })
 
 export const ProductListScreen = connect(mapStateToProps, { getPagedProductsAction }, null)(_ProductListScreen)
+ProductListScreen.whyDidYouRender = {
+  logOnDifferentValues: true,
+  customName: 'ProductListScreen'
+}
