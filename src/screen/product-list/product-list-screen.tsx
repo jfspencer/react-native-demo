@@ -20,7 +20,7 @@ const s = StyleSheet.create({
   headerButton: { marginRight: 20, fontSize: 20 }
 })
 
-const pullMoreProducts = (last: number, setPage: Function, total: number, localCount: number, productAction: any) => (info: any) => {
+const pullMoreProducts = (last: number, setPage: Function, total: number, localCount: number, productAction: any) => () => {
   if (total === 0) productAction(last)
   else if (total > localCount) productAction(last)
   setPage(last + 1)
@@ -28,13 +28,17 @@ const pullMoreProducts = (last: number, setPage: Function, total: number, localC
 
 const getProductKey = (item: any) => String(item.id)
 
-const renderLine = ({ item }: { item: Product }) => (<TouchableOpacity style={s.button} onPress={() => navigate('ProductDetail', { id: item.id, layout: 'View' })}><Text>{item.product_name} : {item.brand}</Text></TouchableOpacity>)
+const renderLine = ({ item }: { item: Product }) => (
+  <TouchableOpacity style={s.button} onPress={() => navigate('ProductDetail', { id: item.id, layout: 'View' })}>
+    <Text>{item.product_name} : {item.brand}</Text>
+  </TouchableOpacity>
+)
 
-export const _ProductListScreen: SFCExt<Props> = ({ navigation, allProducts, total, getPagedProductsAction }) => {
+export const _ProductListScreen: SFCExt<Props> = ({ allProducts, total, getPagedProductsAction }) => {
   const [lastPage, setPage] = useState(0);
 
   useEffect(() => {
-    pullMoreProducts(lastPage, setPage, total, allProducts.length, getPagedProductsAction)(null)
+    pullMoreProducts(lastPage, setPage, total, allProducts.length, getPagedProductsAction)()
   }, [])
 
   //
@@ -54,18 +58,16 @@ export const _ProductListScreen: SFCExt<Props> = ({ navigation, allProducts, tot
 
 _ProductListScreen.navigationOptions = {
   title: 'Product List',
-  headerRight: (<TouchableOpacity style={s.headerButton} onPress={() => navigate('ProductDetail', { layout: 'Create' })}><Text>New</Text></TouchableOpacity>)
+  headerRight: (
+    <TouchableOpacity style={s.headerButton} onPress={() => navigate('ProductDetail', { layout: 'Create' })}>
+      <Text>New</Text>
+    </TouchableOpacity>
+  )
 };
-
 
 const mapStateToProps = (state: any) => ({
   allProducts: selectAllProducts(state),
   total: selectAllProductsTotal(state)
-
 })
 
 export const ProductListScreen = connect(mapStateToProps, { getPagedProductsAction }, null)(_ProductListScreen)
-ProductListScreen.whyDidYouRender = {
-  logOnDifferentValues: true,
-  customName: 'ProductListScreen'
-}

@@ -1,15 +1,17 @@
 import React from 'react';
-import { LayoutMode } from '@interface/common';
+import { LayoutMode, Product } from '@interface/common';
 import { ProductDetailCreate } from './product-layout-create';
 import { ProductDetailView } from './product-layout-view';
 import { ProductDetailEdit } from './product-layout-edit';
 import { TouchableOpacity, Text, StyleSheet } from 'react-native';
-import { navigate } from '@nav/util/nav-service';
-//import { styles } from './inventory-list.style'
+import { connect } from 'react-redux';
+import { selectProductById } from '@state/product';
+
 
 
 
 interface Props extends Navigation<{ id: number, layout: LayoutMode }> {
+  product: Product
   state: any
 }
 
@@ -18,7 +20,7 @@ const s = StyleSheet.create({
   headerButton: { marginRight: 20, fontSize: 20 }
 })
 
-export class ProductDetailScreen extends React.Component<Props> {
+export class _ProductDetailScreen extends React.Component<Props> {
   static staticSetState: any
   componentDidMount() {
     this.setState({ layout: this.props.navigation.state.params.layout })
@@ -35,14 +37,21 @@ export class ProductDetailScreen extends React.Component<Props> {
   };
 
   render() {
-    const { id, layout } = this.props.navigation.state.params
+    const { product } = this.props
+    const { layout } = this.props.navigation.state.params
     return (
       <>
-        {layout == 'Create' && <ProductDetailCreate test={1} />}
-        {layout == 'View' && <ProductDetailView test={1} />}
-        {layout == 'Edit' && <ProductDetailEdit test={1} />}
+        {layout == 'Create' && <ProductDetailCreate />}
+        {layout == 'View' && <ProductDetailView product={product} />}
+        {layout == 'Edit' && <ProductDetailEdit product={product} />}
       </>
 
     );
   }
 }
+
+const mapStateToProps = (state: any, ownProps: Props) => ({
+  product: selectProductById(state, ownProps.navigation.getParam('id', null))
+})
+
+export const ProductDetailScreen = connect(mapStateToProps, null, null)(_ProductDetailScreen)

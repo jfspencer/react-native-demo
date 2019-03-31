@@ -9,6 +9,7 @@ interface Navigation<StateParams> {
         state: {
             params: StateParams
         }
+        getParam: (key: string, defaultVal: any) => any
         navigate: (route: RouteName, param?: any) => void
         push: (route: RouteName, param?: any) => void
         replace: (route: RouteName, param?: any) => void
