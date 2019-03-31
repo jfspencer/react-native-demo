@@ -1,17 +1,34 @@
 import { getAuth } from "@state/_middleware/api";
+import { apiAction } from "@state/_middleware/utils";
+import { navigate } from "@nav/util/nav-service";
 
-//actions
-export const getAuthAction = (user: string, pass: string) => ({
-    type: 'API_REQUEST',
-    api: {
-        request: getAuth,
-        requestData: [user, pass],
-        successActionName: 'AUTH_RESPONSE'
-    }
-});
-
+//
+//ACTIONS
+//
+export const getAuthAction = (user: string, pass: string) => apiAction(getAuth, [user, pass], 'AUTH_RESPONSE')
 export const setJWTAction = (jwt: string) => ({ type: 'SET_JWT', payload: jwt });
 
-//selectors
+//
+//SELECTORS
+//
 export const getAccessToken = (state: any) => state.auth.token
 export const getAuthError = (state: any) => state.auth.error
+
+//
+// REDCUERS
+//
+const initialState = { token: null, error: null }
+
+const cases: any = {}
+cases['AUTH_RESPONSE'] = (state: any, action: any) => {
+    if (action.payload.error === 0) navigate('ProductList')
+    return { ...state, token: action.payload.token, error: action.payload.error }
+}
+cases['SET_JWT'] = (state: any, action: any) => {
+    navigate('ProductList')
+    return ({ ...state, token: action.payload })
+}
+
+export const authReducer = (state = initialState, action: any) => {
+    return typeof cases[action.type] === 'function' ? cases[action.type](state, action) : state;
+}

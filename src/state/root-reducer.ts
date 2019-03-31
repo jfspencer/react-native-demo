@@ -1,8 +1,8 @@
 import { combineReducers } from 'redux';
 import { inventory } from '@state/inventory/inventory-reducer';
-import { product } from '@state/product/product-reducer';
+import { productReducer as product } from '@state/product';
 import { order } from '@state/order/order-reducer';
-import { auth } from '@state/auth/auth-reducer';
+import { authReducer as auth } from '@state/auth';
 
 const appReducer = combineReducers({
   auth,
