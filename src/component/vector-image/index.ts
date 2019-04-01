@@ -1,1 +1,0 @@
-export { VectorImage } from './vector-image';

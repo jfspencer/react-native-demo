@@ -34,7 +34,6 @@ export const _ProductDetailForm: SFC<Props> =
             setLatestProduct(latestProduct)
         }, [])
 
-        //onBlur={mergeChanges(['product_name',name], sendLatestChanges)}
         const updateProduct = (sendChanges: Function, key: string) => (val: string) => {
             const next = { ...latestProduct }
             next[key] = val
