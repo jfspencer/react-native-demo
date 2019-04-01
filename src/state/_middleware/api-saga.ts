@@ -44,11 +44,14 @@ export function* apiProcessor(action: any) {
             const processedResponse = action.api.successFn ? action.api.successFn(result) : result;
             yield putResolve({ type: action.api.successActionName, payload: processedResponse });
         }
-    } catch (e) {
+        return result
+    }
+    catch (e) {
         if (action.api.failureActionName) {
             const failureResponse = action.api.failureFn ? action.api.failureFn(e) : e;
             yield putResolve({ type: action.api.failureActionName, payload: failureResponse });
         }
+        return e
     }
 }
 

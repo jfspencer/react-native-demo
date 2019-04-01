@@ -2,7 +2,7 @@ import React, { SFC, useState, useEffect } from 'react';
 import { Text, TextInput, StyleSheet, ScrollView } from 'react-native';
 import { Picker } from 'native-base';
 import { Product } from '@interface/common';
-import { getProductStylesAction, selectProductStyles, getProductColorsAction, selectProductColors } from '@state/product';
+import { getProductStylesAction, selectProductStyles, getProductColorsAction } from '@state/product';
 import { connect } from 'react-redux';
 
 interface Props {
@@ -13,6 +13,7 @@ interface Props {
     getProductStylesAction: Function
     getProductColorsAction: Function
     sendLatestChanges: Function
+    isCreate: boolean
 }
 
 const s = StyleSheet.create({
@@ -21,10 +22,10 @@ const s = StyleSheet.create({
     input: { height: 40, borderColor: 'gray', borderWidth: 1, marginVertical: 10, marginHorizontal: 20 }
 })
 
-const pickerOptions = (options: string[]) => options.map(v => (<Picker.Item label={v} value={v} />))
+const pickerOptions = (options: string[]) => options.map(v => (<Picker.Item key={v} label={v} value={v} />))
 
-export const _ProductDetailEdit: SFC<Props> =
-    ({ product, productStyles, productColors, getProductStylesAction, getProductColorsAction, sendLatestChanges }) => {
+export const _ProductDetailForm: SFC<Props> =
+    ({ product, productStyles, getProductStylesAction, getProductColorsAction, sendLatestChanges }) => {
 
         const [latestProduct, setLatestProduct] = useState(product)
         useEffect(() => {
@@ -44,21 +45,25 @@ export const _ProductDetailEdit: SFC<Props> =
 
         return (
             <ScrollView>
-                <Text style={s.line}>ID: {product.id}</Text>
+                {product.id ? <Text style={s.line}>ID: {product.id}</Text> : <Text style={s.label}></Text>}
                 <Text style={s.label}>Name</Text>
                 <TextInput returnKeyType={'next'} style={s.input} value={latestProduct.product_name}
+                    placeholder={'Product Name'}
                     onChangeText={updateProduct(sendLatestChanges, 'product_name')} />
 
                 <Text style={s.label}>Brand</Text>
                 <TextInput returnKeyType={'next'} style={s.input} value={latestProduct.brand}
+                    placeholder={'Product Brand'}
                     onChangeText={updateProduct(sendLatestChanges, 'brand')} />
 
                 <Text style={s.label}>Ship Price (TODO needs input mask)</Text>
-                <TextInput returnKeyType={'next'} style={s.input} value={String(latestProduct.shipping_price)}
+                <TextInput returnKeyType={'next'} style={s.input} value={String(latestProduct.shipping_price ? latestProduct.shipping_price : '')}
+                    placeholder={'shipping Price'}
                     onChangeText={updateProduct(sendLatestChanges, 'shipping_price')} />
 
                 <Text style={s.label}>Description</Text>
                 <TextInput returnKeyType={'next'} style={{ ...s.input, height: 80 }} multiline={true} numberOfLines={4}
+                    placeholder={'Product Description'}
                     value={latestProduct.description}
                     onChangeText={updateProduct(sendLatestChanges, 'description')} />
 
@@ -74,8 +79,7 @@ export const _ProductDetailEdit: SFC<Props> =
     }
 
 const mapStateToProps = (state: any) => ({
-    productStyles: selectProductStyles(state),
-    productColors: selectProductColors(state)
+    productStyles: selectProductStyles(state)
 })
 
-export const ProductDetailEdit = connect(mapStateToProps, { getProductStylesAction, getProductColorsAction }, null)(_ProductDetailEdit)
+export const ProductDetailForm = connect(mapStateToProps, { getProductStylesAction, getProductColorsAction }, null)(_ProductDetailForm)

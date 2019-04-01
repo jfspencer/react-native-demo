@@ -14,7 +14,7 @@ export const getPagedProducts = (page: number, limit: number) => getConfig(`${ba
 export const getSingleProduct = (id: string) => getConfig(`${baseUrl}/product/${id}`, baseHeaders)
 export const getProductStyles = () => getConfig(`${baseUrl}/styles`, baseHeaders)
 export const getProductColors = () => getConfig(`${baseUrl}/colors`, baseHeaders)
-export const postProduct = (product: NewProduct) => postConfig(`${baseUrl}/product`, product, baseHeaders)
+export const createProduct = (product: NewProduct) => postConfig(`${baseUrl}/product`, product, baseHeaders)
 export const updateProduct = (id: string, product: NewProduct) => putConfig(`${baseUrl}/product/${id}`, product, baseHeaders)
 export const deleteProduct = (id: string) => deleteConfig(`${baseUrl}/product/${id}`, baseHeaders)
 

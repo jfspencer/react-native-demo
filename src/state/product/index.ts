@@ -1,4 +1,4 @@
-import { getPagedProducts, getProductStyles, getProductColors, updateProduct, getSingleProduct } from "@state/_middleware/api";
+import { getPagedProducts, getProductStyles, getProductColors, getSingleProduct } from "@state/_middleware/api";
 import { Product } from "@interface/common";
 import { apiAction } from "@state/_middleware/utils";
 import uniqBy from 'lodash/uniqBy'
@@ -9,7 +9,9 @@ export const getPagedProductsAction = (page = 0, limit = 100) => apiAction(getPa
 export const getSingleProductAction = (id: number) => apiAction(getSingleProduct, [id], 'PRODUCT_SINGLE_RESPONSE')
 export const getProductStylesAction = () => apiAction(getProductStyles, [], 'PRODUCT_STYLES_RESPONSE')
 export const getProductColorsAction = () => apiAction(getProductColors, [], 'PRODUCT_COLORS_RESPONSE')
+export const createProductAction = (product: Product, callback: Function) => ({ type: 'PRODUCT_UPDATE_SAGA', payload: { product }, callback })
 export const updateProductAction = (product: Product, callback: Function) => ({ type: 'PRODUCT_UPDATE_SAGA', payload: { product }, callback })
+
 
 //------ SELECTORS ------//
 export const selectAllProducts = (state: any) => state.product.allProducts

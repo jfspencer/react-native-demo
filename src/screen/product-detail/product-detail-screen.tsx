@@ -1,10 +1,10 @@
 import React from 'react';
 import { LayoutMode, Product } from '@interface/common';
 import { ProductDetailView } from './product-layout-view';
-import { ProductDetailEdit } from './product-layout-edit';
+import { ProductDetailForm } from './product-layout-form';
 import { TouchableOpacity, Text, StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
-import { selectProductById, updateProductAction } from '@state/product';
+import { selectProductById, updateProductAction, createProductAction } from '@state/product';
 import { store } from '@state/index';
 
 
@@ -23,8 +23,9 @@ const s = StyleSheet.create({
 let latestProductRef: Product
 const handleSave = (nav: any, layout: LayoutMode) => () => {
   if (layout === 'Edit') store.dispatch(updateProductAction(latestProductRef, () => nav.pop()))
-  //else if (layout === 'Create') store.dispatch()
-  nav.pop()
+  else if (layout === 'Create') store.dispatch(createProductAction(latestProductRef, () => nav.pop()))
+  else nav.pop()
+  latestProductRef = {} as Product;
 }
 
 const updateProductRef = (product: Product) => { latestProductRef = product }
@@ -55,9 +56,9 @@ export class _ProductDetailScreen extends React.Component<Props> {
     const { layout } = this.props.navigation.state.params
     return (
       <>
-        {layout == 'Create' && <ProductDetailEdit product={{}} sendLatestChanges={updateProductRef} />}
+        {layout == 'Create' && <ProductDetailForm product={{}} sendLatestChanges={updateProductRef} />}
         {layout == 'View' && <ProductDetailView product={product} />}
-        {layout == 'Edit' && <ProductDetailEdit product={product} sendLatestChanges={updateProductRef} />}
+        {layout == 'Edit' && <ProductDetailForm product={product} sendLatestChanges={updateProductRef} />}
       </>
 
     );
