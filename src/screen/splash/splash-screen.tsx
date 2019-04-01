@@ -20,9 +20,9 @@ const styles = StyleSheet.create({
 })
 
 export const SplashScreen: SFC<Props> = ({ }) => {
-  const [user, setUser] = useState('truman.marcos@foomail.org');
-  const [pass, setPass] = useState('AqSMUhGxgy');
-  const [jwt, setJWT] = useState('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjY0LCJleHAiOjE1ODU1MzE2NDd9.AlvstTir73NnA-hX8J5ecbx8TnfNxL8A4QtuRLsY3NA');
+  const [user, setUser] = useState('');
+  const [pass, setPass] = useState('');
+  const [jwt, setJWT] = useState('');
 
   useEffect(() => {
     //appInit().fork(console.error, () => navigation.navigate("ProductList"))
@@ -43,13 +43,13 @@ export const SplashScreen: SFC<Props> = ({ }) => {
         value={pass}
         secureTextEntry={true}
       />
-      <TextInput
+      {/* <TextInput
         style={styles.input}
         placeholder={'JWT'}
         onChangeText={setJWT}
         value={pass}
         secureTextEntry={true}
-      />
+      /> */}
       <TouchableOpacity style={styles.button} onPress={() => {
         if (jwt) store.dispatch(setJWTAction(jwt))
         else store.dispatch(getAuthAction(user, pass))
