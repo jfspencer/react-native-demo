@@ -1,5 +1,5 @@
 import React, { SFC, useState, useEffect } from 'react';
-import { Text, TextInput, StyleSheet, ScrollView } from 'react-native';
+import { Text, TextInput, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import { Picker } from 'native-base';
 import { Product } from '@interface/common';
 import { getProductStylesAction, selectProductStyles, getProductColorsAction } from '@state/product';
@@ -73,6 +73,7 @@ export const _ProductDetailForm: SFC<Props> =
                     onValueChange={updateProduct(sendLatestChanges, 'style')}>
                     {pickerOptions(productStyles)}
                 </Picker>
+                {product.id && <TouchableOpacity><Text>Delete</Text></TouchableOpacity>}
             </ScrollView>
         )
     }

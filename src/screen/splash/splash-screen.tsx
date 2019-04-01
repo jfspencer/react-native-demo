@@ -33,12 +33,14 @@ export const SplashScreen: SFC<Props> = ({ }) => {
       <TextInput
         style={{ ...styles.input, marginTop: 120 }}
         placeholder={'email@address.here'}
+        autoCapitalize={'none'}
         onChangeText={setUser}
         value={user}
       />
       <TextInput
         style={styles.input}
         placeholder={'passWordHere'}
+        autoCapitalize={'none'}
         onChangeText={setPass}
         value={pass}
         secureTextEntry={true}
