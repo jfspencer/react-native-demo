@@ -21,7 +21,3 @@ UI Approach:
 Other Explorations
 - Use Typescript
 - Use React hooks
-
-Implementation Notes:
-- added the redux actions for the colors endpoint, but didn't expose them to the UI since the post/put product endpoints do not consume color
-- not sure if  after the PUT request resolves, the subsequent get response is pulling the updated data, it doesn't seem to reflect updates to the product?
