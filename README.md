@@ -1,6 +1,4 @@
-# csdemo
-csdemo
-
+# react-native-demo
 
 App Stack
 - React Native (For comparison discussion of existing native implementations)
